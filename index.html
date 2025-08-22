@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Exploration - Journey Through the Solar System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Space-themed gradient background */
+    body {
+      background: radial-gradient(ellipse at center, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* Animated stars background */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    
+    /* Planet card hover effects with 3D scaling */
+    .planet-card {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+    }
+    
+    .planet-card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+    }
+    
+    .planet-card img {
+      transition: transform 0.6s ease-in-out;
+      filter: brightness(0.9);
+    }
+    
+    .planet-card:hover img {
+      transform: scale(1.15) rotate(5deg);
+      filter: brightness(1.1);
+    }
+    
+    /* Modal animations */
+    .modal-overlay {
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease-in-out;
+    }
+    
+    .modal-content {
+      transform: scale(0.8) translateY(50px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .modal-content.show {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    
+    /* Scroll indicator animation */
+    .scroll-indicator {
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
+    /* Planet orbit animation */
+    .planet-orbit {
+      animation: orbit 20s linear infinite;
+    }
+    
+    @keyframes orbit {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Glow effect for planets */
+    .planet-glow {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Typography enhancements */
+    .hero-title {
+      background: linear-gradient(45deg, #ffffff, #a855f7, #3b82f6);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient 3s ease-in-out infinite alternate;
+    }
+    
+    @keyframes gradient {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(45deg); }
+    }
+  </style>
+</head>
+<body class="text-white font-sans relative">
+  <!-- Animated stars background -->
+  <div class="stars" id="stars"></div>
+  
+  <!-- Hero Section -->
+  <section class="h-screen flex flex-col justify-center items-center text-center relative z-10">
+    <div class="mb-8">
+      <h1 class="text-6xl md:text-7xl font-bold mb-6 hero-title">🚀 Space Exploration</h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto px-4 text-gray-300 leading-relaxed">
+        Embark on an incredible journey through our solar system. Discover the mysteries, beauty, and fascinating facts about the planets that share our cosmic neighborhood.
+      </p>
+    </div>
+    <div class="mt-12 scroll-indicator">
+      <div class="text-3xl mb-2">⬇️</div>
+      <p class="text-sm text-gray-400 uppercase tracking-wider">Scroll to explore</p>
+    </div>
+  </section>
+
+  <!-- Planet List Section -->
+  <section id="planet-list" class="min-h-screen p-8 md:p-12 relative z-10">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-4">Explore the Planets</h2>
+      <p class="text-xl text-center text-gray-300 mb-12 max-w-2xl mx-auto">
+        Click on any planet to learn fascinating details about these celestial bodies
+      </p>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-12">
+        <!-- Earth -->
+        <div class="planet-card cursor-pointer text-center p-6 rounded-2xl bg-gradient-to-b from-blue-900/20 to-green-900/20 backdrop-blur-sm border border-white/10" onclick="showPlanet('earth')">
+          <div class="planet-orbit">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg" 
+                 alt="Earth" 
+                 class="rounded-full shadow-2xl mx-auto w-40 h-40 object-cover planet-glow">
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-blue-300">Earth</h3>
+          <p class="mt-2 text-sm text-gray-400">The Blue Planet</p>
+        </div>
+
+        <!-- Mars -->
+        <div class="planet-card cursor-pointer text-center p-6 rounded-2xl bg-gradient-to-b from-red-900/20 to-orange-900/20 backdrop-blur-sm border border-white/10" onclick="showPlanet('mars')">
+          <div class="planet-orbit">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg" 
+                 alt="Mars" 
+                 class="rounded-full shadow-2xl mx-auto w-40 h-40 object-cover planet-glow">
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-red-300">Mars</h3>
+          <p class="mt-2 text-sm text-gray-400">The Red Planet</p>
+        </div>
+
+        <!-- Jupiter -->
+        <div class="planet-card cursor-pointer text-center p-6 rounded-2xl bg-gradient-to-b from-yellow-900/20 to-orange-900/20 backdrop-blur-sm border border-white/10" onclick="showPlanet('jupiter')">
+          <div class="planet-orbit">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg" 
+                 alt="Jupiter" 
+                 class="rounded-full shadow-2xl mx-auto w-40 h-40 object-cover planet-glow">
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-yellow-300">Jupiter</h3>
+          <p class="mt-2 text-sm text-gray-400">The Gas Giant</p>
+        </div>
+
+        <!-- Venus -->
+        <div class="planet-card cursor-pointer text-center p-6 rounded-2xl bg-gradient-to-b from-yellow-900/20 to-orange-900/20 backdrop-blur-sm border border-white/10" onclick="showPlanet('venus')">
+          <div class="planet-orbit">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg" 
+                 alt="Venus" 
+                 class="rounded-full shadow-2xl mx-auto w-40 h-40 object-cover planet-glow">
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-yellow-300">Venus</h3>
+          <p class="mt-2 text-sm text-gray-400">The Morning Star</p>
+        </div>
+
+        <!-- Saturn -->
+        <div class="planet-card cursor-pointer text-center p-6 rounded-2xl bg-gradient-to-b from-yellow-900/20 to-brown-900/20 backdrop-blur-sm border border-white/10" onclick="showPlanet('saturn')">
+          <div class="planet-orbit">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg" 
+                 alt="Saturn" 
+                 class="rounded-full shadow-2xl mx-auto w-40 h-40 object-cover planet-glow">
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-yellow-300">Saturn</h3>
+          <p class="mt-2 text-sm text-gray-400">The Ringed Planet</p>
+        </div>
+
+        <!-- Mercury -->
+        <div class="planet-card cursor-pointer text-center p-6 rounded-2xl bg-gradient-to-b from-gray-900/20 to-orange-900/20 backdrop-blur-sm border border-white/10" onclick="showPlanet('mercury')">
+          <div class="planet-orbit">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Mercury_in_color_-_Prockter07-edit.jpg" 
+                 alt="Mercury" 
+                 class="rounded-full shadow-2xl mx-auto w-40 h-40 object-cover planet-glow">
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-gray-300">Mercury</h3>
+          <p class="mt-2 text-sm text-gray-400">The Swift Planet</p>
+        </div>
+
+        <!-- Uranus -->
+        <div class="planet-card cursor-pointer text-center p-6 rounded-2xl bg-gradient-to-b from-cyan-900/20 to-blue-900/20 backdrop-blur-sm border border-white/10" onclick="showPlanet('uranus')">
+          <div class="planet-orbit">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg" 
+                 alt="Uranus" 
+                 class="rounded-full shadow-2xl mx-auto w-40 h-40 object-cover planet-glow">
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-cyan-300">Uranus</h3>
+          <p class="mt-2 text-sm text-gray-400">The Ice Giant</p>
+        </div>
+
+        <!-- Neptune -->
+        <div class="planet-card cursor-pointer text-center p-6 rounded-2xl bg-gradient-to-b from-blue-900/20 to-indigo-900/20 backdrop-blur-sm border border-white/10" onclick="showPlanet('neptune')">
+          <div class="planet-orbit">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg" 
+                 alt="Neptune" 
+                 class="rounded-full shadow-2xl mx-auto w-40 h-40 object-cover planet-glow">
+          </div>
+          <h3 class="mt-6 text-2xl font-semibold text-blue-300">Neptune</h3>
+          <p class="mt-2 text-sm text-gray-400">The Windy Planet</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Indian Space Missions Section -->
+  <section class="min-h-screen p-8 md:p-12 relative z-10">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 text-orange-400">🇮🇳 India's Future Space Missions</h2>
+      <p class="text-xl text-center text-gray-300 mb-12 max-w-3xl mx-auto">
+        Discover ISRO's ambitious upcoming missions that will shape the future of space exploration
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Gaganyaan Mission -->
+        <div class="bg-gradient-to-br from-orange-900/30 to-red-900/30 backdrop-blur-sm border border-orange-500/20 rounded-2xl p-6 hover:scale-105 transition-transform duration-300">
+          <div class="text-center mb-4">
+            <div class="text-4xl mb-2">🚀</div>
+            <h3 class="text-2xl font-bold text-orange-300">Gaganyaan</h3>
+            <p class="text-orange-200 text-sm">2026</p>
+          </div>
+          <p class="text-gray-300 text-sm leading-relaxed mb-4">
+            India's first human spaceflight mission. Will carry 2-3 astronauts to 400km altitude for up to 7 days, making India the 4th country to independently send humans to space.
+          </p>
+          <div class="space-y-1 text-xs text-gray-400">
+            <p>• Duration: Up to 7 days in orbit</p>
+            <p>• Crew: 2-3 astronauts</p>
+            <p>• Rocket: Human-rated LVM3</p>
+          </div>
+        </div>
+
+        <!-- NISAR Mission -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-cyan-900/30 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 hover:scale-105 transition-transform duration-300">
+          <div class="text-center mb-4">
+            <div class="text-4xl mb-2">🛰️</div>
+            <h3 class="text-2xl font-bold text-blue-300">NISAR</h3>
+            <p class="text-blue-200 text-sm">March 2025</p>
+          </div>
+          <p class="text-gray-300 text-sm leading-relaxed mb-4">
+            Joint Earth observation mission with NASA. First dual-frequency synthetic aperture radar satellite to measure changes on Earth's surface down to centimeters.
+          </p>
+          <div class="space-y-1 text-xs text-gray-400">
+            <p>• Partnership: NASA-ISRO</p>
+            <p>• Technology: Dual-frequency radar</p>
+            <p>• Purpose: Earth surface monitoring</p>
+          </div>
+        </div>
+
+        <!-- Chandrayaan-4 Mission -->
+        <div class="bg-gradient-to-br from-purple-900/30 to-indigo-900/30 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-6 hover:scale-105 transition-transform duration-300">
+          <div class="text-center mb-4">
+            <div class="text-4xl mb-2">🌙</div>
+            <h3 class="text-2xl font-bold text-purple-300">Chandrayaan-4</h3>
+            <p class="text-purple-200 text-sm">2028</p>
+          </div>
+          <p class="text-gray-300 text-sm leading-relaxed mb-4">
+            Lunar sample return mission that will bring Moon rocks back to Earth. This complex mission requires multiple launches and advanced space docking technology.
+          </p>
+          <div class="space-y-1 text-xs text-gray-400">
+            <p>• Goal: Lunar sample return</p>
+            <p>• Technology: Space docking</p>
+            <p>• Innovation: Multiple launches</p>
+          </div>
+        </div>
+
+        <!-- SpaDeX Mission -->
+        <div class="bg-gradient-to-br from-green-900/30 to-teal-900/30 backdrop-blur-sm border border-green-500/20 rounded-2xl p-6 hover:scale-105 transition-transform duration-300">
+          <div class="text-center mb-4">
+            <div class="text-4xl mb-2">🔗</div>
+            <h3 class="text-2xl font-bold text-green-300">SpaDeX</h3>
+            <p class="text-green-200 text-sm">Ongoing 2025</p>
+          </div>
+          <p class="text-gray-300 text-sm leading-relaxed mb-4">
+            Space Docking Experiment to demonstrate India's space docking capabilities. Critical technology for future missions like Chandrayaan-4 and the Indian Space Station.
+          </p>
+          <div class="space-y-1 text-xs text-gray-400">
+            <p>• Technology: Autonomous docking</p>
+            <p>• Purpose: Future mission prep</p>
+            <p>• Applications: Space station development</p>
+          </div>
+        </div>
+
+        <!-- Shukrayaan Mission -->
+        <div class="bg-gradient-to-br from-yellow-900/30 to-orange-900/30 backdrop-blur-sm border border-yellow-500/20 rounded-2xl p-6 hover:scale-105 transition-transform duration-300">
+          <div class="text-center mb-4">
+            <div class="text-4xl mb-2">🪐</div>
+            <h3 class="text-2xl font-bold text-yellow-300">Shukrayaan</h3>
+            <p class="text-yellow-200 text-sm">Future</p>
+          </div>
+          <p class="text-gray-300 text-sm leading-relaxed mb-4">
+            Venus exploration mission to study the planet's surface and atmosphere. Will provide valuable insights into Venus's extreme greenhouse effect and geological features.
+          </p>
+          <div class="space-y-1 text-xs text-gray-400">
+            <p>• Target: Venus</p>
+            <p>• Focus: Atmosphere and surface</p>
+            <p>• Research: Climate studies</p>
+          </div>
+        </div>
+
+        <!-- Mangalyaan-2 Mission -->
+        <div class="bg-gradient-to-br from-red-900/30 to-pink-900/30 backdrop-blur-sm border border-red-500/20 rounded-2xl p-6 hover:scale-105 transition-transform duration-300">
+          <div class="text-center mb-4">
+            <div class="text-4xl mb-2">🔴</div>
+            <h3 class="text-2xl font-bold text-red-300">Mangalyaan-2</h3>
+            <p class="text-red-200 text-sm">Future</p>
+          </div>
+          <p class="text-gray-300 text-sm leading-relaxed mb-4">
+            Advanced Mars mission with orbiter, lander, and rover. Building on the success of Mangalyaan-1, this mission will include surface exploration capabilities.
+          </p>
+          <div class="space-y-1 text-xs text-gray-400">
+            <p>• Components: Orbiter, lander, rover</p>
+            <p>• Successor to: Mangalyaan-1</p>
+            <p>• Goal: Mars surface exploration</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <div class="bg-gradient-to-r from-orange-900/20 to-red-900/20 backdrop-blur-sm border border-orange-500/20 rounded-2xl p-6 max-w-4xl mx-auto">
+          <h3 class="text-2xl font-bold text-orange-300 mb-4">🎯 Long-term Vision</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+            <div>
+              <div class="text-lg mb-2">🏗️</div>
+              <h4 class="text-orange-200 font-semibold mb-2">Indian Space Station</h4>
+              <p class="text-gray-400">Development of India's own space station for long-duration missions</p>
+            </div>
+            <div>
+              <div class="text-lg mb-2">🌙</div>
+              <h4 class="text-orange-200 font-semibold mb-2">Lunar Mission by 2040</h4>
+              <p class="text-gray-400">Manned lunar mission to establish India's presence on the Moon</p>
+            </div>
+            <div>
+              <div class="text-lg mb-2">📈</div>
+              <h4 class="text-orange-200 font-semibold mb-2">10% Global Share</h4>
+              <p class="text-gray-400">Increase India's space economy contribution from 2% to 10% by 2035</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Planet Info Modal -->
+  <section id="planet-info" class="hidden fixed inset-0 modal-overlay bg-black/80 flex flex-col justify-center items-center p-4 z-50">
+    <button onclick="closePlanet()" class="absolute top-6 right-6 text-white text-3xl hover:text-red-400 transition-colors duration-200 z-60">
+      ✖
+    </button>
+    <div id="planet-content" class="modal-content max-w-4xl w-full bg-gradient-to-br from-gray-900/90 to-black/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/10"></div>
+  </section>
+
+  <script>
+    // Planet data with detailed information
+    const planetData = {
+      earth: {
+        name: "Earth",
+        img: "https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg",
+        subtitle: "The Blue Planet",
+        desc: "Earth is the third planet from the Sun and the only astronomical object known to harbor life. It's our home planet, covered by 71% water and supporting an incredible diversity of life forms.",
+        facts: [
+          "Age: 4.54 billion years",
+          "Distance from Sun: 149.6 million km",
+          "Diameter: 12,742 km",
+          "One day: 24 hours",
+          "One year: 365.25 days"
+        ],
+        color: "blue"
+      },
+      mars: {
+        name: "Mars",
+        img: "https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg",
+        subtitle: "The Red Planet",
+        desc: "Mars is the fourth planet from the Sun, often called the 'Red Planet' due to its reddish appearance caused by iron oxide on its surface. It's a prime target for human exploration.",
+        facts: [
+          "Distance from Sun: 227.9 million km",
+          "Diameter: 6,779 km",
+          "One day: 24 hours 37 minutes",
+          "One year: 687 Earth days",
+          "Moons: 2 (Phobos and Deimos)"
+        ],
+        color: "red"
+      },
+      jupiter: {
+        name: "Jupiter",
+        img: "https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg",
+        subtitle: "The Gas Giant",
+        desc: "Jupiter is the largest planet in our solar system, known for its Great Red Spot, a giant storm that has been raging for hundreds of years. It has more than 80 moons.",
+        facts: [
+          "Distance from Sun: 778.5 million km",
+          "Diameter: 139,820 km",
+          "One day: 9 hours 56 minutes",
+          "One year: 12 Earth years",
+          "Moons: 95+ known moons"
+        ],
+        color: "yellow"
+      },
+      venus: {
+        name: "Venus",
+        img: "https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg",
+        subtitle: "The Morning Star",
+        desc: "Venus is the second planet from the Sun and the hottest planet in our solar system. Its thick atmosphere traps heat in a runaway greenhouse effect, making it hotter than Mercury.",
+        facts: [
+          "Distance from Sun: 108.2 million km",
+          "Diameter: 12,104 km",
+          "One day: 243 Earth days",
+          "One year: 225 Earth days",
+          "Surface temperature: 462°C"
+        ],
+        color: "yellow"
+      },
+      saturn: {
+        name: "Saturn",
+        img: "https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg",
+        subtitle: "The Ringed Planet",
+        desc: "Saturn is the sixth planet from the Sun and is famous for its spectacular ring system. It's a gas giant composed mostly of hydrogen and helium, and it's less dense than water.",
+        facts: [
+          "Distance from Sun: 1.43 billion km",
+          "Diameter: 116,460 km",
+          "One day: 10 hours 42 minutes",
+          "One year: 29 Earth years",
+          "Moons: 146 known moons"
+        ],
+        color: "yellow"
+      },
+      mercury: {
+        name: "Mercury",
+        img: "https://upload.wikimedia.org/wikipedia/commons/d/d9/Mercury_in_color_-_Prockter07-edit.jpg",
+        subtitle: "The Swift Planet",
+        desc: "Mercury is the smallest planet in our solar system and the closest to the Sun. It has extreme temperatures, from 427°C during the day to -173°C at night due to its lack of atmosphere.",
+        facts: [
+          "Distance from Sun: 57.9 million km",
+          "Diameter: 4,879 km",
+          "One day: 59 Earth days",
+          "One year: 88 Earth days",
+          "No moons or rings"
+        ],
+        color: "gray"
+      },
+      uranus: {
+        name: "Uranus",
+        img: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg",
+        subtitle: "The Ice Giant",
+        desc: "Uranus is the seventh planet from the Sun and rotates on its side, making it unique among planets. It's an ice giant composed of water, methane, and ammonia ices.",
+        facts: [
+          "Distance from Sun: 2.87 billion km",
+          "Diameter: 50,724 km",
+          "One day: 17 hours 14 minutes",
+          "One year: 84 Earth years",
+          "Moons: 27 known moons"
+        ],
+        color: "cyan"
+      },
+      neptune: {
+        name: "Neptune",
+        img: "https://upload.wikimedia.org/wikipedia/commons/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg",
+        subtitle: "The Windy Planet",
+        desc: "Neptune is the eighth and outermost planet in our solar system. It's known for having the strongest winds in the solar system, reaching speeds of up to 2,100 kilometers per hour.",
+        facts: [
+          "Distance from Sun: 4.5 billion km",
+          "Diameter: 49,244 km",
+          "One day: 16 hours 6 minutes",
+          "One year: 165 Earth years",
+          "Moons: 16 known moons"
+        ],
+        color: "blue"
+      }
+    };
+
+    // Function to show planet information in modal
+    function showPlanet(planet) {
+      const infoSection = document.getElementById('planet-info');
+      const content = document.getElementById('planet-content');
+      const data = planetData[planet];
+
+      // Generate facts list HTML
+      const factsList = data.facts.map(fact => `<li class="text-gray-300">${fact}</li>`).join('');
+
+      content.innerHTML = `
+        <div class="text-center">
+          <img src="${data.img}" class="rounded-full w-60 h-60 md:w-80 md:h-80 mx-auto mb-8 shadow-2xl planet-glow object-cover">
+          <h2 class="text-4xl md:text-5xl font-bold mb-2 text-${data.color}-300">${data.name}</h2>
+          <p class="text-xl text-gray-400 mb-6">${data.subtitle}</p>
+          <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8 text-gray-200 leading-relaxed">${data.desc}</p>
+          
+          <div class="bg-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/10">
+            <h3 class="text-2xl font-semibold mb-4 text-${data.color}-300">Quick Facts</h3>
+            <ul class="text-left space-y-2 max-w-md mx-auto">
+              ${factsList}
+            </ul>
+          </div>
+        </div>
+      `;
+
+      // Show modal with animation
+      infoSection.classList.remove('hidden');
+      setTimeout(() => {
+        content.classList.add('show');
+      }, 50);
+      
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Function to close planet modal
+    function closePlanet() {
+      const infoSection = document.getElementById('planet-info');
+      const content = document.getElementById('planet-content');
+      
+      // Hide with animation
+      content.classList.remove('show');
+      setTimeout(() => {
+        infoSection.classList.add('hidden');
+      }, 300);
+      
+      // Restore body scroll
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside content
+    document.getElementById('planet-info').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closePlanet();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePlanet();
+      }
+    });
+
+    // Generate animated stars background
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const numberOfStars = 150;
+
+      for (let i = 0; i < numberOfStars; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        
+        // Random position
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        
+        // Random size
+        const size = Math.random() * 3 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        
+        // Random animation delay
+        star.style.animationDelay = Math.random() * 3 + 's';
+        
+        starsContainer.appendChild(star);
+      }
+    }
+
+    // Initialize stars when page loads
+    document.addEventListener('DOMContentLoaded', createStars);
+
+    // Smooth scrolling for the scroll indicator
+    document.querySelector('.scroll-indicator').addEventListener('click', function() {
+      document.getElementById('planet-list').scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+
+    // Add parallax effect to stars on scroll
+    window.addEventListener('scroll', function() {
+      const scrolled = window.pageYOffset;
+      const stars = document.getElementById('stars');
+      stars.style.transform = `translateY(${scrolled * 0.5}px)`;
+    });
+  </script>
+</body>
+</html>
